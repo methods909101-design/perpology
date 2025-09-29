@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpology - AI Crypto Trading Analysis</title>
+    <link rel="icon" type="image/png" href="perpology_pfp.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="header-top">
+                <div class="logo">
+                    <h2 id="homeBtn">Perpology</h2>
+                </div>
+                <div class="header-icons">
+                    <div class="home-btn" id="homeBtnIcon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <a href="https://x.com/Perpology" target="_blank" class="x-logo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <button class="new-chat-btn" id="newChatBtn">
+                <span class="plus-icon">+</span>
+                New chat
+            </button>
+        </div>
+        
+        <div class="chat-history" id="chatHistory">
+            <!-- Chat history will be populated here -->
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="wallet-section" id="walletSection">
+                <button class="connect-wallet-btn" id="connectWalletBtn">
+                    Connect Phantom Wallet
+                </button>
+                <div class="wallet-info hidden" id="walletInfo">
+                    <div class="wallet-address" id="walletAddress"></div>
+                    <button class="disconnect-btn" id="disconnectBtn">Disconnect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Landing Page -->
+        <div class="landing-page" id="landingPage">
+            <div class="landing-container">
+                <div class="landing-header">
+                    <h1>Welcome to Perpology</h1>
+                    <p>AI-powered crypto analysis for perpetual trading</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Live Data Analysis</h3>
+                        <p>Real-time crypto market data and trend analysis</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+                                <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3>AI Insights</h3>
+                        <p>Advanced AI algorithms for trading signal generation</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor"/>
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Perpetual Trading</h3>
+                        <p>Specialized tools for perpetual futures trading</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M3 10h18" stroke="currentColor" stroke-width="2"/>
+                                <path d="M7 15h.01M11 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="18" cy="8" r="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3>Secure Wallet</h3>
+                        <p>Connect your Phantom wallet for secure access</p>
+                    </div>
+                </div>
+                
+                <div class="cta-section">
+                    <p>Connect your Phantom wallet to start analyzing crypto markets</p>
+                    <div class="cta-buttons">
+                        <button class="cta-button" id="ctaConnectBtn">Get Started</button>
+                        <a href="https://x.com/Perpology" target="_blank" class="cta-button x-button" id="ctaXBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-interface hidden" id="chatInterface">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="message-content">
+                            <h3>Ready when you are.</h3>
+                            <p>Ask me anything about crypto markets, trading strategies, or perpetual futures.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="suggested-messages" id="suggestedMessages">
+                        <div class="suggested-message" data-message="What's the recent news surrounding SOL?">
+                            <span>What's the recent news surrounding SOL?</span>
+                        </div>
+                        <div class="suggested-message" data-message="What's your technical analysis of the current SOL chart?">
+                            <span>What's your technical analysis of the current SOL chart?</span>
+                        </div>
+                        <div class="suggested-message" data-message="Give me a Perpetual trade recommendation for any crypto I can look to short">
+                            <span>Give me a Perpetual trade recommendation for any crypto I can look to short</span>
+                        </div>
+                    </div>
+                    <div class="rate-limit-counter hidden" id="rateLimitCounter">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="clock-icon">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="timer-content">
+                            <span class="rate-limit-text" id="rateLimitText">Next message in:</span>
+                            <span class="countdown-timer" id="countdownTimer">00:20</span>
+                        </div>
+                    </div>
+                    <div class="chat-input-wrapper">
+                        <textarea 
+                            id="chatInput" 
+                            placeholder="Ask anything about crypto trading..."
+                            rows="1"
+                        ></textarea>
+                        <button class="send-button" id="sendButton">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
