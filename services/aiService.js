@@ -74,10 +74,67 @@ IMPORTANT: Do not use any hashtag symbols (#) or markdown headers (###, ##, #) i
                 max_tokens: 1500,
                 temperature: 0.7,
                 presence_penalty: 0.1,
-                frequency_penalty: 0.1
+                frequency_penalty: 0.1,
+                tools: [
+                    {
+                        type: "function",
+                        function: {
+                            name: "search_crypto_prices",
+                            description: "Search for live cryptocurrency prices and market data",
+                            parameters: {
+                                type: "object",
+                                properties: {
+                                    symbols: {
+                                        type: "array",
+                                        items: { type: "string" },
+                                        description: "Array of cryptocurrency symbols to get prices for"
+                                    }
+                                },
+                                required: ["symbols"]
+                            }
+                        }
+                    }
+                ],
+                tool_choice: "auto"
             });
 
-            let response = completion.choices[0].message.content;
+            let response;
+            
+            // Handle tool calls if present
+            if (completion.choices[0].message.tool_calls) {
+                // Add the assistant's message with tool calls to the conversation
+                messages.push(completion.choices[0].message);
+
+                // Process each tool call
+                for (const toolCall of completion.choices[0].message.tool_calls) {
+                    if (toolCall.function.name === 'search_crypto_prices') {
+                        const args = JSON.parse(toolCall.arguments);
+                        const priceData = await this.getLiveCryptoPrices(args.symbols);
+                        
+                        // Add the function response to the conversation
+                        messages.push({
+                            role: 'tool',
+                            tool_call_id: toolCall.id,
+                            content: JSON.stringify(priceData)
+                        });
+                    }
+                }
+
+                // Get the final response with the tool results
+                const finalCompletion = await openai.chat.completions.create({
+                    model: 'gpt-4o-mini',
+                    messages: messages,
+                    max_tokens: 1500,
+                    temperature: 0.7,
+                    presence_penalty: 0.1,
+                    frequency_penalty: 0.1
+                });
+
+                response = finalCompletion.choices[0].message.content;
+            } else {
+                // No tool calls, use the original response
+                response = completion.choices[0].message.content;
+            }
             
             // Ensure response is not null before processing
             if (!response || typeof response !== 'string') {
@@ -213,6 +270,85 @@ IMPORTANT: Do not use any hashtag symbols (#) or markdown headers (###, ##, #) i
         } catch (error) {
             console.error('Web search error:', error);
             return null;
+        }
+    }
+
+    async getLiveCryptoPrices(symbols) {
+        try {
+            // Convert symbols to lowercase and join for CoinGecko API
+            const symbolsString = symbols.map(s => {
+                const symbolMap = {
+                    'BTC': 'bitcoin',
+                    'ETH': 'ethereum', 
+                    'SOL': 'solana',
+                    'ADA': 'cardano',
+                    'DOT': 'polkadot',
+                    'LINK': 'chainlink',
+                    'UNI': 'uniswap',
+                    'AAVE': 'aave',
+                    'MATIC': 'matic-network',
+                    'AVAX': 'avalanche-2',
+                    'ATOM': 'cosmos',
+                    'NEAR': 'near',
+                    'FTM': 'fantom',
+                    'ALGO': 'algorand',
+                    'XRP': 'ripple',
+                    'LTC': 'litecoin',
+                    'DOGE': 'dogecoin'
+                };
+                return symbolMap[s.toUpperCase()] || s.toLowerCase();
+            }).join(',');
+
+            const response = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${symbolsString}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`);
+            
+            // Transform the response to match our expected format
+            const priceData = {};
+            Object.keys(response.data).forEach(coinId => {
+                const symbolMap = {
+                    'bitcoin': 'BTC',
+                    'ethereum': 'ETH',
+                    'solana': 'SOL',
+                    'cardano': 'ADA',
+                    'polkadot': 'DOT',
+                    'chainlink': 'LINK',
+                    'uniswap': 'UNI',
+                    'aave': 'AAVE',
+                    'matic-network': 'MATIC',
+                    'avalanche-2': 'AVAX',
+                    'cosmos': 'ATOM',
+                    'near': 'NEAR',
+                    'fantom': 'FTM',
+                    'algorand': 'ALGO',
+                    'ripple': 'XRP',
+                    'litecoin': 'LTC',
+                    'dogecoin': 'DOGE'
+                };
+                
+                const symbol = symbolMap[coinId] || coinId.toUpperCase();
+                const data = response.data[coinId];
+                
+                priceData[symbol] = {
+                    price: data.usd,
+                    change_24h: data.usd_24h_change,
+                    market_cap: data.usd_market_cap,
+                    volume_24h: data.usd_24h_vol,
+                    timestamp: new Date().toISOString()
+                };
+            });
+
+            return priceData;
+        } catch (error) {
+            console.error('Live crypto prices error:', error);
+            // Return fallback data
+            const fallbackData = {};
+            symbols.forEach(symbol => {
+                fallbackData[symbol] = {
+                    price: 'N/A',
+                    change_24h: 'N/A',
+                    error: 'Failed to fetch live price data'
+                };
+            });
+            return fallbackData;
         }
     }
 
