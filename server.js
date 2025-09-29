@@ -4,9 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const aiService = require('./services/aiService');
-const cryptoService = require('./services/cryptoService');
-const supabaseService = require('./services/supabaseService');
+const aiService = require('./services/aiService.js');
+const cryptoService = require('./services/cryptoService.js');
+const supabaseService = require('./services/supabaseService.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
